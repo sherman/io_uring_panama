@@ -7,14 +7,17 @@ version '1.0-SNAPSHOT'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(20)
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
-    testRuntimeOnly platform('org.junit:junit-bom:5.9.2')
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine'
+    testImplementation platform('org.junit:junit-bom:5.9.2')
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine'
+    testImplementation 'org.junit.vintage:junit-vintage-engine'
 
     testImplementation platform('org.junit:junit-bom:5.9.2')
     testImplementation platform('org.mockito:mockito-bom:5.2.0')
-
 }
 
 tasks.withType(JavaCompile).each {
@@ -22,6 +25,6 @@ tasks.withType(JavaCompile).each {
 }
 
 test {
+    jvmArgs '--enable-preview'
     useJUnitPlatform()
 }
-
