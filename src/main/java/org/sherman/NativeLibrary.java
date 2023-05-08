@@ -26,7 +26,7 @@ public class NativeLibrary {
                 var libData = readStream(in);
 
                 String tmpDir = System.getProperty("java.io.tmpdir", "/tmp");
-                File dll = new File(tmpDir, "libhnswlib." + crc32(libData) + ".so");
+                File dll = new File(tmpDir, "liburing." + crc32(libData) + ".so");
                 if (!dll.exists() || dll.length() != libData.size() && dll.delete()) {
                     FileOutputStream out = new FileOutputStream(dll);
                     out.write(libData.toByteArray(), 0, libData.size());
