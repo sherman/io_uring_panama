@@ -43,7 +43,7 @@ public class IOUring implements AutoCloseable {
     private final Arena allocator;
 
     private final AtomicLong sequence = new AtomicLong();
-    private final Map<Long, IOOperationResult> context = new HashMap<>();
+    private final Map<Long, IOOperationResult> inflightOperations = new HashMap<>();
 
     public IOUring(int size) {
         this.size = size;
@@ -198,7 +198,7 @@ public class IOUring implements AutoCloseable {
         var opsCount = sequence.getAndIncrement();
         io_uring_prep_nop_panama(sqeSegment);
         io_uring_sqe.user_data$set(sqeSegment, opsCount);
-        context.put(opsCount, new IOOperationResult(OperationType.NO, (result, bufferId) -> runnable.run()));
+        inflightOperations.put(opsCount, new IOOperationResult(OperationType.NO, (result, bufferId) -> runnable.run()));
         return opsCount;
     }
 
@@ -261,7 +261,7 @@ public class IOUring implements AutoCloseable {
                 }
                 var flags = io_uring_cqe.flags$get(cqe);
                 var isMultiOp = (flags & IORING_CQE_F_MORE()) != 0;
-                var result = isMultiOp ? context.get(opsCount) : context.remove(opsCount);
+                var result = isMultiOp ? inflightOperations.get(opsCount) : inflightOperations.remove(opsCount);
                 if (result == null) {
                     logger.error("No result for operation:" + opsCount);
                     io_uring_cqe_seen_panama(ring, cqe);
