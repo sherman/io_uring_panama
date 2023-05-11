@@ -133,7 +133,7 @@ public class IOUring implements AutoCloseable {
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public boolean removeBuffer() {
+    public boolean removeBuffers() {
         var sqe = getSqe();
         if (sqe == null) {
             return false;
@@ -222,7 +222,7 @@ public class IOUring implements AutoCloseable {
     @Override
     public void close() {
         logger.info("Close");
-        removeBuffer();
+        removeBuffers();
         allocator.close();
     }
 
