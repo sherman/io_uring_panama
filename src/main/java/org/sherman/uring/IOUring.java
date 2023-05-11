@@ -267,6 +267,7 @@ public class IOUring implements AutoCloseable {
                     io_uring_cqe_seen_panama(ring, cqe);
                     continue;
                 }
+                // fill operation callback with required fields
                 result.flags = flags;
                 result.userData = opsCount;
                 result.result = io_uring_cqe.res$get(cqe);
