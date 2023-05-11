@@ -3,9 +3,11 @@
 set -e -x
 
 JEXTRACT_PATH=/home/sherman/apps/jextract-20/bin/
+HERE=`pwd`
 
-$JEXTRACT_PATH/jextract --source -t org.sherman -lliburing -I liburing/src/include/liburing/ liburing/src/include/liburing.h
+mkdir -p src/main/java/org/sherman/liburing
+rm -rf src/main/java/org/sherman/liburing/*
 
-mkdir -p src/main/java/org/sherman
 
-mv org/sherman/*.java src/main/java/org/sherman/
+$JEXTRACT_PATH/jextract --source -t org.sherman.liburing --output src/main/java/ -I liburing/src/ -I liburing/src/include/liburing/ -I liburing/src/include/ liburing/src/include/liburing.h
+

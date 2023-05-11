@@ -2,8 +2,9 @@ package org.sherman;
 
 import java.lang.foreign.Linker;
 import java.lang.foreign.SymbolLookup;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.sherman.uring.NativeLibrary;
 
 public class NativeLibraryLoadTest {
     private static final SymbolLookup SYMBOL_LOOKUP;
@@ -20,7 +21,7 @@ public class NativeLibraryLoadTest {
 
     @Test
     public void libraryIsLoaded() {
-        Assert.assertTrue(NativeLibrary.IS_SUPPORTED);
+        Assertions.assertTrue(NativeLibrary.IS_SUPPORTED);
     }
 
 }

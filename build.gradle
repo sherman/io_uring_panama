@@ -12,6 +12,9 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.slf4j:slf4j-api:2.0.7'
+    implementation 'ch.qos.logback:logback-classic:1.4.7'
+
     testImplementation platform('org.junit:junit-bom:5.9.2')
     testImplementation 'org.junit.jupiter:junit-jupiter-engine'
     testImplementation 'org.junit.vintage:junit-vintage-engine'
@@ -25,6 +28,6 @@ tasks.withType(JavaCompile).each {
 }
 
 test {
-    jvmArgs '--enable-preview'
+    jvmArgs '--enable-preview', '--add-opens=java.base/java.io=ALL-UNNAMED'
     useJUnitPlatform()
 }
