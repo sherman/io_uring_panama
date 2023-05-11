@@ -1,6 +1,6 @@
 package org.sherman.uring;
 
-public class IOOperationResult {
+public class OperationResult {
     private final OperationType operationType;
     private final OperationCallback operationCallback;
 
@@ -10,7 +10,7 @@ public class IOOperationResult {
     public int result;
     public int bufferId;
 
-    public IOOperationResult(OperationType operationType, OperationCallback operationCallback) {
+    public OperationResult(OperationType operationType, OperationCallback operationCallback) {
         this.operationType = operationType;
         this.operationCallback = operationCallback;
     }

@@ -43,7 +43,7 @@ public class IOUring implements AutoCloseable {
     private final Arena allocator;
 
     private final AtomicLong sequence = new AtomicLong();
-    private final Map<Long, IOOperationResult> inflightOperations = new HashMap<>();
+    private final Map<Long, OperationResult> inflightOperations = new HashMap<>();
 
     public IOUring(int size) {
         this.size = size;
@@ -198,7 +198,7 @@ public class IOUring implements AutoCloseable {
         var opsCount = sequence.getAndIncrement();
         io_uring_prep_nop_panama(sqeSegment);
         io_uring_sqe.user_data$set(sqeSegment, opsCount);
-        inflightOperations.put(opsCount, new IOOperationResult(OperationType.NO, (result, bufferId) -> runnable.run()));
+        inflightOperations.put(opsCount, new OperationResult(OperationType.NO, (result, bufferId) -> runnable.run()));
         return opsCount;
     }
 
@@ -246,11 +246,11 @@ public class IOUring implements AutoCloseable {
     }
 
     // FIXME: rewrite it completely
-    public List<IOOperationResult> batchGetCqe(int max) {
+    public List<OperationResult> batchGetCqe(int max) {
         try (var session = Arena.openConfined()) {
             var cqePointer = session.allocate(C_POINTER.byteSize());
             var count = 0;
-            var results = new ArrayList<IOOperationResult>();
+            var results = new ArrayList<OperationResult>();
             while (count <= max && io_uring_peek_cqe_panama(ring, cqePointer) == 0) {
                 // get pointer to cqe struct
                 var cqe = cqePointer.get(C_POINTER, 0);
