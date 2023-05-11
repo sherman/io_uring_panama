@@ -142,7 +142,7 @@ public class IOUring implements AutoCloseable {
         var expected = 0;
         var left = buffers.length;
         while (left > 0) {
-            int toRemove = left;
+            var toRemove = left;
             left -= toRemove;
             io_uring_prep_remove_buffers_panama(sqe, toRemove, groupId);
             // use it later to check a number of actions (e.g. sys-calls) actually completed by io_uring
