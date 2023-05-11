@@ -77,7 +77,7 @@ public class IOUring implements AutoCloseable {
 
         submit(buffers.length);
 
-        try (Arena session = Arena.openConfined()) {
+        try (var session = Arena.openConfined()) {
             for (var i = 0; i < buffers.length; i++) {
                 // allocate double pointer to cqe struct
                 var cqePointer = session.allocate(C_POINTER);
@@ -153,7 +153,7 @@ public class IOUring implements AutoCloseable {
 
         submit(expected);
 
-        try (Arena session = Arena.openConfined()) {
+        try (var session = Arena.openConfined()) {
             for (; expected > 0; expected--) {
                 // allocate double pointer to cqe struct
                 var cqePointer = session.allocate(C_POINTER);
@@ -231,7 +231,7 @@ public class IOUring implements AutoCloseable {
     }
 
     public void waitComplete(long waitMs) {
-        try (Arena session = Arena.openConfined()) {
+        try (var session = Arena.openConfined()) {
             var cqePointer = session.allocate(C_POINTER.byteSize());
             if (waitMs == -1) {
                 io_uring_wait_cqe_panama(ring, cqePointer);
@@ -247,7 +247,7 @@ public class IOUring implements AutoCloseable {
 
     // FIXME: rewrite it completely
     public List<IOOperationResult> batchGetCqe(int max) {
-        try (Arena session = Arena.openConfined()) {
+        try (var session = Arena.openConfined()) {
             var cqePointer = session.allocate(C_POINTER.byteSize());
             var count = 0;
             var results = new ArrayList<IOOperationResult>();
